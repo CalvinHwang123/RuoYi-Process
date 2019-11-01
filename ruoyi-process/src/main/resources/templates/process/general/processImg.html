@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('审批历史')" />
+	<style>
+		.iblock {
+			display: inline-block;
+			height: 100%;
+			width: 0;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+
+<body class="gray-bg">
+	<div class="container-div" style="text-align: center;">
+		<img alt="暂无图片" style="vertical-align: middle;">
+		<i class="iblock"></i>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+		var prefix = ctx + "process/general";
+		var instanceId = [[${instanceId}]];
+
+		$(function() {
+			var url =  prefix + '/read-resource?pProcessInstanceId=' + instanceId;
+			$('img').attr('src', url);
+		});
+
+		function submitHandler() {
+			$.modal.close();
+		}
+
+	</script>
+</body>
+</html>

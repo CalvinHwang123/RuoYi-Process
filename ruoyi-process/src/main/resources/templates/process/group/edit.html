@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改流程用户组')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-group-edit" th:object="${actIdGroup}">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">组ID：</label>
+                <div class="col-sm-8">
+                    <input name="id" th:field="*{id}" class="form-control" type="text" readonly="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">用户：</label>
+                <div class="col-sm-8">
+                    <select id="user" class="form-control select2-multiple" multiple>
+                        <option th:each="user:${users}" th:value="${user.id}" th:text="${user.id} + ' ' + ${user.first}" th:selected="${user.flag}"></option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "process/group";
+        $("#form-group-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $('#form-group-edit').serializeArray();
+                var userIds = $.form.selectSelects("user");
+                data.push({"name": "userIds", "value": userIds});
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+    </script>
+</body>
+</html>

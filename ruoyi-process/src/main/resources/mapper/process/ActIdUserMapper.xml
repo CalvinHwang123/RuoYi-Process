@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.user.mapper.ActIdUserMapper">
+
+    <resultMap type="ActIdUser" id="ActIdUserResult">
+        <result property="id"    column="ID_"    />
+        <result property="rev"    column="REV_"    />
+        <result property="first"    column="FIRST_"    />
+        <result property="last"    column="LAST_"    />
+        <result property="email"    column="EMAIL_"    />
+        <result property="pwd"    column="PWD_"    />
+        <result property="pictureId"    column="PICTURE_ID_"    />
+    </resultMap>
+
+    <sql id="selectActIdUserVo">
+        select ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, PICTURE_ID_ from act_id_user
+    </sql>
+
+    <select id="selectActIdUserList" parameterType="ActIdUser" resultMap="ActIdUserResult">
+        <include refid="selectActIdUserVo"/>
+        <where>
+            <if test="id != null "> and ID_ like concat('%', #{id}, '%')</if>
+            <if test="rev != null "> and REV_ = #{rev}</if>
+            <if test="first != null  and first != ''"> and FIRST_ like concat('%', #{first}, '%')</if>
+            <if test="last != null  and last != ''"> and LAST_ = #{last}</if>
+            <if test="email != null  and email != ''"> and EMAIL_ like concat('%', #{email}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectActIdUserById" parameterType="String" resultMap="ActIdUserResult">
+        <include refid="selectActIdUserVo"/>
+        where ID_ = #{id}
+    </select>
+
+    <insert id="insertActIdUser" parameterType="ActIdUser">
+        insert into act_id_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID_,</if>
+            <if test="rev != null ">REV_,</if>
+            <if test="first != null  and first != ''">FIRST_,</if>
+            <if test="last != null  and last != ''">LAST_,</if>
+            <if test="email != null  and email != ''">EMAIL_,</if>
+            <if test="pwd != null  and pwd != ''">PWD_,</if>
+            <if test="pictureId != null  and pictureId != ''">PICTURE_ID_,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="rev != null ">#{rev},</if>
+            <if test="first != null  and first != ''">#{first},</if>
+            <if test="last != null  and last != ''">#{last},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="pwd != null  and pwd != ''">#{pwd},</if>
+            <if test="pictureId != null  and pictureId != ''">#{pictureId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateActIdUser" parameterType="ActIdUser">
+        update act_id_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rev != null ">REV_ = #{rev},</if>
+            <if test="first != null  and first != ''">FIRST_ = #{first},</if>
+            <if test="last != null  and last != ''">LAST_ = #{last},</if>
+            <if test="email != null  and email != ''">EMAIL_ = #{email},</if>
+            <if test="pwd != null  and pwd != ''">PWD_ = #{pwd},</if>
+            <if test="pictureId != null  and pictureId != ''">PICTURE_ID_ = #{pictureId},</if>
+        </trim>
+        where ID_ = #{id}
+    </update>
+
+    <delete id="deleteActIdUserById" parameterType="String">
+        delete from act_id_user where ID_ = #{id}
+    </delete>
+
+    <delete id="deleteActIdUserByIds" parameterType="String">
+        delete from act_id_user where ID_ in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

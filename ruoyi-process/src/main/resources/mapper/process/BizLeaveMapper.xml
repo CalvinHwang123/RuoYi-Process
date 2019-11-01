@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.leave.mapper.BizLeaveMapper">
+
+    <resultMap type="BizLeaveVo" id="BizLeaveResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="title"    column="title"    />
+        <result property="reason"    column="reason"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="totalTime"    column="total_time"    />
+        <result property="instanceId"    column="instance_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="applyTime"    column="apply_time"    />
+    </resultMap>
+
+    <sql id="selectBizLeaveVo">
+        select id, type, title, reason, start_time, end_time, total_time, instance_id, create_by, create_time, update_by, update_time, apply_user, apply_time from biz_leave
+    </sql>
+
+    <select id="selectBizLeaveList" parameterType="BizLeaveVo" resultMap="BizLeaveResult">
+        <include refid="selectBizLeaveVo"/>
+        <where>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="totalTime != null "> and total_time = #{totalTime}</if>
+            <if test="instanceId != null  and instanceId != ''"> and instance_id = #{instanceId}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(start_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(end_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBizLeaveById" parameterType="Long" resultMap="BizLeaveResult">
+        <include refid="selectBizLeaveVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBizLeave" parameterType="BizLeaveVo" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_leave
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">type,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="reason != null  and reason != ''">reason,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="totalTime != null ">total_time,</if>
+            <if test="instanceId != null  and instanceId != ''">instance_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="totalTime != null ">#{totalTime},</if>
+            <if test="instanceId != null  and instanceId != ''">#{instanceId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizLeave" parameterType="BizLeaveVo">
+        update biz_leave
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="reason != null  and reason != ''">reason = #{reason},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="totalTime != null ">total_time = #{totalTime},</if>
+            <if test="instanceId != null  and instanceId != ''">instance_id = #{instanceId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="applyUser != null ">apply_user = #{applyUser},</if>
+            <if test="applyTime != null ">apply_time = #{applyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizLeaveById" parameterType="Long">
+        delete from biz_leave where id = #{id}
+    </delete>
+
+    <delete id="deleteBizLeaveByIds" parameterType="String">
+        delete from biz_leave where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--360浏览器优先以webkit内核解析-->
+  <title>闲鹿工作流介绍</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+  <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+  <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+  <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+  <div class="col-sm-3">
+    <h2>Hello Activiti 6.x!</h2>
+    <small>加入闲鹿工作流交流群解锁更多姿势：</small>
+    <br>
+    <br>
+    <img th:src="@{/img/qr_code.png}" width="100%" style="max-width:264px;">
+    <br>
+  </div>
+  <div class="col-sm-5">
+    <h2>闲鹿工作流管理系统</h2>
+    <p>闲鹿工作流是一款基于 RuoYi 4.x + Activiti 6.x + Spring Boot 2.x + Thymeleaf 3.x 的开源工作流管理系统~体验地址：<a
+      href="http://47.96.25.96" target="_blank">http://47.96.25.96</a></p>
+    <p>作为技术小菜鸟的我，一直对学习 Activiti 工作流框架求之不得，断断续续入门入了三次。这次能够写出这个项目主要归功于 ☕🐇 的<a
+      href="https://github.com/henryyan/activiti-in-action-codes" target="_blank">《Activiti 实战》</a>。这本书给予了我很大的帮助。最后但仍然重要的，我要感谢<a
+      href="http://www.ruoyi.vip" target="_blank">若依框架</a>，她让我实现快速集成工作流 WEB 应用。—— from 一只闲鹿</p>
+    <p>参考资料 👇</p>
+    <ol>
+      <li>若依框架: <a target="_blank" href="http://www.ruoyi.vip">http://www.ruoyi.vip</a></li>
+      <li>咖啡兔：<a href="https://github.com/henryyan/activiti-in-action-codes" target="_blank">《Activiti 实战》</a></li>
+      <li>Activiti User Guide: <a target="_blank" href="https://www.activiti.org/userguide/index.html#springSpringBoot">https://www.activiti.org/userguide/index.html#springSpringBoot</a>
+      </li>
+      <li>XBoot: <a target="_blank" href="http://xboot.exrick.cn">http://xboot.exrick.cn</a></li>
+    </ol>
+    <p>
+      <b>当前版本：</b><span>v[[${version}]]</span>
+    </p>
+    <p>
+      <span class="label label-warning">&yen;免费开源</span>
+    </p>
+    <p>👇 随手 star ⭐是一种美德。</p>
+    <p>
+      <a class="btn btn-success btn-outline" href="https://gitee.com/calvinhwang123/RuoYi-Process" target="_blank">
+        <i class="fa fa-cloud"> </i> 访问码云
+      </a>
+      <a class="btn btn-white btn-bitbucket" href="https://github.com/CalvinHwang123/RuoYi-Process" target="_blank">
+        <i class="fa fa-github"></i> 访问 GitHub
+      </a>
+    </p>
+  </div>
+  <div class="col-sm-4">
+    <h4>技术选型：</h4>
+    <ol>
+      <li>流程框架：<a href="https://www.activiti.org/" target="_blank">Activiti 6.x</a></li>
+      <li>核心框架：Spring Boot 2.x</li>
+      <li>在线绘图：<a href="https://github.com/bpmn-io/bpmn-js" target="_blank">bpmn-js</a></li>
+      <li>模板引擎：Thymeleaf 3.x</li>
+      <li>更多……</li>
+    </ol>
+  </div>
+  <div class="col-sm-4" style="color: red;">
+    <h4>流程用户和用户组：</h4>
+    <ol>
+      <li>普通员工：chengxy 程序猿 / 123456</li>
+      <li>部门领导：axianlu 一只闲鹿 / 123456</li>
+      <li>人事：rensm 人事喵 / 123456</li>
+    </ol>
+  </div>
+
+</div>
+<div class="wrapper wrapper-content">
+  <div class="row">
+    <div class="col-sm-4">
+
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>联系信息</h5>
+
+        </div>
+        <div class="ibox-content">
+          <p><i class="fa fa-qq"></i> QQ群：<a href="javascript:;">/ 794711759</a>
+          </p>
+          <p><i class="fa fa-weixin"></i> 微信：<a href="javascript:;">/ huangluqian12345</a>
+          </p>
+          <p><i class="fa fa-credit-card"></i> QQ：<a href="javascript:;" class="支付宝信息">/ 1055202292</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>更新日志</h5>
+        </div>
+        <div class="ibox-content no-padding">
+          <div class="panel-body">
+            <div class="panel-group" id="version">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h5 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#version" href="#v11">v1.1</a><code class="pull-right">2019.11.01</code>
+                  </h5>
+                </div>
+                <div id="v11" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    <ol>
+                      <li>请假表单必填项控制。</li>
+                      <li>请假列表显示创建人、高亮申请人、分页修复。</li>
+                      <li>流程定义导出问题修复、不允许删除存在流程实例的流程定义。</li>
+                      <li>在线绘图部分界面汉化。</li>
+                      <li>首页信息修改。</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="panel-heading">
+                  <h5 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#version" href="#v10">v1.0 闲鹿工作流正式发布</a><code
+                    class="pull-right">2019.10.31</code>
+                  </h5>
+                </div>
+                <div id="v10" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ol>
+                      <li>新增流程 demo2：请假会签，支持请假列表、新增暂存、编辑、删除；提交申请 (含选择会签参与人)、表单数据、我的待办 (申请详情、审批、调整申请、销假)、我的已办。</li>
+                      <li>新增流程 demo1：请假业务，支持请假列表、新增暂存、编辑、删除；提交申请、表单数据、我的待办 (申请详情、审批、调整申请、销假)、我的已办。</li>
+                      <li>新增流程通用接口：审批历史和进度查看。</li>
+                      <li>新增流程用户组功能，支持流程用户组列表、新增、编辑、删除和导出。</li>
+                      <li>新增流程用户功能，支持流程用户列表、新增、编辑、删除和导出。</li>
+                      <li>新增流程定义功能，支持流程定义部署、列表、删除和导出。</li>
+                      <li>新增在线绘图功能，支持拖拽预览、在线绘图、下载 BPMN 文件和 SVG 文件。</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>捐赠</h5>
+        </div>
+        <div class="ibox-content">
+          <div class="alert alert-warning">
+            请作者喝杯咖啡（点击图片放大）
+          </div>
+          <p id="pay-qrcode">
+            <a href="javascript:;"><img th:src="@{/img/pay.png}" width="100%" alt="请使用手机支付宝或者微信扫码支付">
+            </a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script type="text/javascript">
+  $('#pay-qrcode').click(function () {
+    var html = $(this).html();
+    parent.layer.open({
+      title: false,
+      type: 1,
+      closeBtn: false,
+      shadeClose: true,
+      area: ['600px', 'auto'],
+      content: html
+    });
+  });
+</script>
+</body>
+</html>

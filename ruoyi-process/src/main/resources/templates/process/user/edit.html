@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改流程用户')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-user-edit" th:object="${actIdUser}">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">用户ID：</label>
+                <div class="col-sm-8">
+                    <input name="id" th:field="*{id}" class="form-control" type="text" readonly="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">名字：</label>
+                <div class="col-sm-8">
+                    <input name="first" th:field="*{first}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="email" th:field="*{email}" class="form-control" type="text">
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">用户组：</label>
+                <div class="col-sm-8">
+                    <select id="group" class="form-control select2-multiple" multiple>
+                        <option th:each="group:${groups}" th:value="${group.id}" th:text="${group.name}" th:selected="${group.flag}"></option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "process/user";
+        $("#form-user-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $('#form-user-edit').serializeArray();
+                var groupIds = $.form.selectSelects("group");
+                data.push({"name": "groupIds", "value": groupIds});
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+
+        $(function() {
+            $('#group').select2({
+                placeholder:"请选择用户组",
+                allowClear: true
+            });
+        })
+    </script>
+</body>
+</html>

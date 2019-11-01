@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改请假业务')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-leave-edit" th:object="${bizLeave}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">申请人：</label>
+                <div class="col-sm-8">
+                    <input name="applyUserName" th:field="*{applyUserName}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">申请时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="applyTime" th:value="${#dates.format(bizLeave.applyTime, 'yyyy-MM-dd HH:mm')}" class="form-control" type="text" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">请假类型：</label>
+                <div class="col-sm-8">
+                    <select name="type" class="form-control m-b" th:with="type=${@dict.getType('biz_leave_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${type}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" th:field="*{title}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>原因：</label>
+                <div class="col-sm-8">
+                    <textarea name="reason" class="form-control" required>[[*{reason}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startTime" th:value="${#dates.format(bizLeave.startTime, 'yyyy-MM-dd HH:mm')}" class="form-control calcTotalSecondInput" placeholder="yyyy-MM-dd" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="endTime" th:value="${#dates.format(bizLeave.endTime, 'yyyy-MM-dd HH:mm')}" class="form-control calcTotalSecondInput" placeholder="yyyy-MM-dd" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">请假时长：</label>
+                <div class="col-sm-8">
+                    <input name="totalTime" th:field="*{totalTime}" class="form-control" type="text" style="display: none;">
+                    <input name="totalTimeText" class="form-control" type="text" readonly>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: select2-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "process/leave";
+        $("#form-leave-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-leave-edit').serialize());
+            }
+        }
+
+        $("input[name='startTime']").datetimepicker({
+            autoclose: true
+        });
+
+        $("input[name='endTime']").datetimepicker({
+            autoclose: true
+        });
+
+        // 监听开始和结束日期填写，动态生成请假时长
+        $('.calcTotalSecondInput').change(function () {
+            if (!$('input[name="startTime"]').val() || !$('input[name="endTime"]').val()) {
+                return;
+            }
+            var totalSecond = $.common.calcTotalSecond($('input[name="startTime"]').val(), $('input[name="endTime"]').val());
+            $('input[name="totalTime"]').val(totalSecond);
+            var dateSub = $.common.formatTotalDateSub(totalSecond);
+            $('input[name="totalTimeText"]').val(dateSub);
+        });
+
+        $(function () {
+            var leave = [[${bizLeave}]];
+            var dateSub = $.common.formatTotalDateSub(leave.totalTime);
+            $('input[name="totalTimeText"]').val(dateSub);
+        });
+    </script>
+</body>
+</html>

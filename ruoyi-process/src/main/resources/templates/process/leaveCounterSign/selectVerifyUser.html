@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-leave-add">
+            <input type="hidden" name="users" />
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <select id="selectUsers" class="form-control m-b select2-multiple" multiple>
+                        </optgroup>
+                        <optgroup th:each="users: ${usersByGroup}" th:label="'--' + ${users['key']} + '--'">
+                            <option th:each="user: ${users['value']}" th:value="${user.id}" th:text="${user.firstName}"></option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: select2-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "process/leaveCounterSign"
+        $("#form-leave-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var users = $('#selectUsers').select2('val');
+            $.modal.confirm("确认要提交申请吗?", function() {
+                var id = [[${id}]];
+                var url = prefix + "/submitApply";
+                var data = {
+                    "id": id,
+                    "users": users
+                };
+                $.operate.submit(url, "post", "json", data);
+                $.modal.close();        // 关闭弹窗
+                $.table.refresh();      // 刷新表格
+            });
+        }
+
+    </script>
+</body>
+</html>

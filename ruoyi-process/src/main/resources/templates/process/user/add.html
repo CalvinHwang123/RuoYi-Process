@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增流程用户')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-user-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">用户ID：</label>
+                <div class="col-sm-8">
+                    <input name="id" class="form-control" type="text" onclick="selectUser()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">名字：</label>
+                <div class="col-sm-8">
+                    <input name="first" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="email" class="form-control" type="text">
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">用户组：</label>
+                <div class="col-sm-8">
+                    <select id="group" class="form-control select2-multiple" multiple>
+                        <option th:each="group:${groups}" th:value="${group.id}" th:text="${group.name}"></option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "process/user"
+        $("#form-user-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $('#form-user-add').serializeArray();
+                var groupIds = $.form.selectSelects("group");
+                data.push({"name": "groupIds", "value": groupIds});
+                $.operate.save(prefix + "/add", data);
+            }
+        }
+
+        /* 分配用户-选择用户 */
+        function selectUser() {
+            var url = ctx + 'process/user/authUser/selectUser';
+            $.modal.open("关联系统用户", url);
+        }
+    </script>
+</body>
+</html>

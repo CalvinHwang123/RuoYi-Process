@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('我的待办')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>请假类型：</p>
+                                <select name="type" th:with="type=${@dict.getType('biz_leave_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>流程实例ID：</p>
+                                <input type="text" name="instanceId"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="process:leave:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('process:leave:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('process:leave:remove')}]];
+        var prefix = ctx + "process/leave";
+        var datas = [[${@dict.getType('biz_leave_type')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/taskList",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                detailUrl: prefix + "/edit/{id}",
+                modalName: "请假业务",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主键ID',
+                    visible: false
+                },
+                {
+                    field : 'type',
+                    title : '请假类型',
+                    align : 'center',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field : 'title',
+                    title : '标题'
+                },
+                {
+                    field : 'reason',
+                    title : '原因'
+                },
+                {
+                    field : 'startTime',
+                    title : '开始时间'
+                },
+                {
+                    field : 'endTime',
+                    title : '结束时间'
+                },
+                {
+                    field : 'totalTime',
+                    title : '请假时长',
+                    formatter: function(value, row, index) {
+                        if (!value) return '未知';
+                        return $.common.formatTotalDateSub(value);
+                    }
+                },
+                {
+                    field : 'instanceId',
+                    title : '流程实例ID'
+                },
+                {
+                    field: 'applyUserName',
+                    title: '<span style="color: red;">申请人</span>',
+                    formatter: function(value, row, index) {
+                        return '<span style="color: red;">' + (value ? value : "-") + '</span>';
+                    }
+                },
+                {
+                    field: 'applyTime',
+                    title: '申请时间'
+                },
+                {
+                    field: 'taskId',
+                    title: '任务ID',
+                    visible: false
+                },
+                {
+                    field: 'taskName',
+                    title: '当前任务名称',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        return '<span class="badge badge-primary">' + value + '</span>';
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (row.taskName.indexOf('审批') !== -1) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showVerifyDialog(\'' + row.taskId + '\', \'' + row.taskName + '\')"><i class="fa fa-edit"></i> 审批</a> ');
+                        } else {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showVerifyDialog(\'' + row.taskId + '\', \'' + row.taskName + '\')"><i class="fa fa-edit"></i> ' + row.taskName + '</a> ');
+                        }
+                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-eye"></i> 申请详情</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showHistoryDialog(\'' + row.instanceId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function submitApply(id) {
+            $.modal.confirm("确认要提交申请吗?", function() {
+                var url = prefix + "/submitApply";
+                var data = { "id": id };
+                $.operate.submit(url, "post", "json", data);
+            });
+        }
+
+        function showVerifyDialog(taskId, taskName) {
+            var url = prefix + "/showVerifyDialog/" + taskId;
+            $.modal.open(taskName, url);
+        }
+
+        /* 查看审批历史 */
+        function showHistoryDialog(instanceId) {
+            var url = ctx + 'process/general/historyList/' + instanceId;
+            $.modal.open("查看审批历史", url);
+        }
+    </script>
+</body>
+</html>

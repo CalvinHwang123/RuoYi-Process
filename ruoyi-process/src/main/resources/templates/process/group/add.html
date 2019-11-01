@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增流程用户组')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-group-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">组ID：</label>
+                <div class="col-sm-8">
+                    <input name="id" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text">
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">用户：</label>
+                <div class="col-sm-8">
+                    <select id="user" class="form-control select2-multiple" multiple>
+                        <option th:each="user:${users}" th:value="${user.id}" th:text="${user.id} + ' ' + ${user.first}"></option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "process/group"
+        $("#form-group-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $('#form-group-add').serializeArray();
+                var userIds = $.form.selectSelects("user");
+                data.push({"name": "userIds", "value": userIds});
+                $.operate.save(prefix + "/add", data);
+            }
+        }
+    </script>
+</body>
+</html>

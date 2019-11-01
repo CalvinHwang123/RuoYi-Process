@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.group.mapper.ActIdGroupMapper">
+
+    <resultMap type="ActIdGroup" id="ActIdGroupResult">
+        <result property="id"    column="ID_"    />
+        <result property="rev"    column="REV_"    />
+        <result property="name"    column="NAME_"    />
+        <result property="type"    column="TYPE_"    />
+    </resultMap>
+
+    <sql id="selectActIdGroupVo">
+        select ID_, REV_, NAME_, TYPE_ from act_id_group
+    </sql>
+
+    <select id="selectActIdGroupList" parameterType="ActIdGroup" resultMap="ActIdGroupResult">
+        <include refid="selectActIdGroupVo"/>
+        <where>
+            <if test="id != null "> and ID_ like concat('%', #{id}, '%')</if>
+            <if test="rev != null "> and REV_ = #{rev}</if>
+            <if test="name != null  and name != ''"> and NAME_ like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and TYPE_ = #{type}</if>
+        </where>
+    </select>
+
+    <select id="selectActIdGroupById" parameterType="String" resultMap="ActIdGroupResult">
+        <include refid="selectActIdGroupVo"/>
+        where ID_ = #{id}
+    </select>
+
+    <insert id="insertActIdGroup" parameterType="ActIdGroup">
+        insert into act_id_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID_,</if>
+            <if test="rev != null ">REV_,</if>
+            <if test="name != null  and name != ''">NAME_,</if>
+            <if test="type != null  and type != ''">TYPE_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="rev != null ">#{rev},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateActIdGroup" parameterType="ActIdGroup">
+        update act_id_group
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rev != null ">REV_ = #{rev},</if>
+            <if test="name != null  and name != ''">NAME_ = #{name},</if>
+            <if test="type != null  and type != ''">TYPE_ = #{type},</if>
+        </trim>
+        where ID_ = #{id}
+    </update>
+
+    <delete id="deleteActIdGroupById" parameterType="String">
+        delete from act_id_group where ID_ = #{id}
+    </delete>
+
+    <delete id="deleteActIdGroupByIds" parameterType="String">
+        delete from act_id_group where ID_ in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
