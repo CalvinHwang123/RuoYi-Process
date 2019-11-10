@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间轴</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+<div th:if="${#lists.isEmpty(todoItemList)}" style="text-align: center; height: 500px; line-height: 500px;">暂无任务</div>
+<div th:unless="${#lists.isEmpty(todoItemList)}" class="row animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div id="ibox-content">
+                <div id="vertical-timeline" class="vertical-container light-timeline">
+                     <div th:each="todoItem: ${todoItemList}" class="vertical-timeline-block">
+                         <div class="vertical-timeline-icon navy-bg">
+                             <i class="fa fa-file-text"></i>
+                         </div>
+                         <div class="vertical-timeline-content">
+                             <h2>【[[${ todoItem.nodeName }]]】[[${ todoItem.itemName }]]</h2>
+                             <p>[[${ todoItem.itemContent }]]
+                             </p>
+                             <a href="javascript:void(0)" class="btn btn-sm btn-primary" th:onclick="showVerifyDialog([[${todoItem.taskId}]], [[${todoItem.module}]], [[${todoItem.taskName}]], [[${todoItem.nodeName}]])"> 办理</a>
+                             <span class="vertical-date">
+                         	<!--今天--> <br>
+                         <small th:text="${#dates.format(todoItem.todoTime, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                     </span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script>
+        var prefix = ctx + "process/todoitem";
+        $(document).ready(function(){
+        });
+
+        function showVerifyDialog(taskId, module, pageName, nodeName) {
+            var url = prefix + "/showVerifyDialog/" + taskId + "?module=" + module + "&formPageName=" + pageName;
+            $.modal.open(nodeName, url);
+        }
+    </script>
+</body>
+</html>

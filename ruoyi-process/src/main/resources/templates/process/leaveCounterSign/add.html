@@ -66,17 +66,19 @@
         });
 
         function submitHandler() {
-            if ($.validate.form()) {
+            if ($.validate.form() && validateStartTimeAndEndTime()) {
                 $.operate.save(prefix + "/add", $('#form-leave-add').serialize());
             }
         }
 
         $("input[name='startTime']").datetimepicker({
-            autoclose: true
+            autoclose: true,
+            startDate: new Date()
         });
 
         $("input[name='endTime']").datetimepicker({
-            autoclose: true
+            autoclose: true,
+            startDate: new Date()
         });
 
         // 监听开始和结束日期填写，动态生成请假时长
@@ -84,11 +86,21 @@
             if (!$('input[name="startTime"]').val() || !$('input[name="endTime"]').val()) {
                return;
            }
-            var totalSecond = $.common.calcTotalSecond($('input[name="startTime"]').val(), $('input[name="endTime"]').val());
-            $('input[name="totalTime"]').val(totalSecond);
-            var dateSub = $.common.formatTotalDateSub(totalSecond);
-            $('input[name="totalTimeText"]').val(dateSub);
+            if (validateStartTimeAndEndTime()) {
+                var totalSecond = $.common.calcTotalSecond($('input[name="startTime"]').val(), $('input[name="endTime"]').val());
+                $('input[name="totalTime"]').val(totalSecond);
+                var dateSub = $.common.formatTotalDateSub(totalSecond);
+                $('input[name="totalTimeText"]').val(dateSub);
+            }
         });
+
+        function validateStartTimeAndEndTime() {
+            if ($('input[name="startTime"]').val() >= $('input[name="endTime"]').val()) {
+                $.modal.alertWarning("结束时间必须大于开始时间");
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>

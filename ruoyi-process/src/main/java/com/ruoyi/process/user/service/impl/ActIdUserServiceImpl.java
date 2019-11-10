@@ -145,6 +145,7 @@ public class ActIdUserServiceImpl implements IActIdUserService
         List<SysUser> returnList = new ArrayList<>();
         Map<String, SysUser> sysUserMap = new HashMap<>();
         userList.forEach(user -> {
+            if (SysUser.isAdmin(user.getUserId())) return;    // 流程用户不允许关联管理员
             sysUserMap.put(user.getLoginName(), user);
         });
         idUserList.forEach(idUser -> {

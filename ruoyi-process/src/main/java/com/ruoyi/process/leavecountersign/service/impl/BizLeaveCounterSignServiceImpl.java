@@ -10,6 +10,8 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.process.leave.domain.BizLeaveVo;
 import com.ruoyi.process.leave.mapper.BizLeaveMapper;
 import com.ruoyi.process.leavecountersign.service.IBizLeaveCounterSignService;
+import com.ruoyi.process.todoitem.domain.BizTodoItem;
+import com.ruoyi.process.todoitem.service.IBizTodoItemService;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysUserMapper;
 import org.activiti.engine.HistoryService;
@@ -55,6 +57,9 @@ public class BizLeaveCounterSignServiceImpl implements IBizLeaveCounterSignServi
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private IBizTodoItemService bizTodoItemService;
 
     /**
      * 查询请假业务
@@ -236,6 +241,22 @@ public class BizLeaveCounterSignServiceImpl implements IBizLeaveCounterSignServi
         // 只有签收任务，act_hi_taskinst 表的 assignee 字段才不为 null
         taskService.claim(taskId, ShiroUtils.getLoginName());
         taskService.complete(taskId, variables);
+
+        // 更新待办事项状态
+        BizTodoItem query = new BizTodoItem();
+        query.setTaskId(taskId);
+        BizTodoItem update = CollectionUtils.isEmpty(bizTodoItemService.selectBizTodoItemList(query)) ? null : bizTodoItemService.selectBizTodoItemList(query).get(0);
+        if (update != null) {
+            update.setIsView("1");
+            update.setIsHandle("1");
+            update.setHandleUserId(ShiroUtils.getLoginName());
+            update.setHandleUserName(ShiroUtils.getSysUser().getUserName());
+            update.setHandleTime(DateUtils.getNowDate());
+            bizTodoItemService.updateBizTodoItem(update);
+        }
+
+        // 下一节点处理人待办事项
+        bizTodoItemService.insertTodoItem(leave.getInstanceId(), leave, "leaveCounterSign");
     }
 
     /**
@@ -302,6 +323,10 @@ public class BizLeaveCounterSignServiceImpl implements IBizLeaveCounterSignServi
         String processInstanceId = processInstance.getId();
         entity.setInstanceId(processInstanceId); // 建立双向关系
         bizLeaveMapper.updateBizLeave(entity);
+
+        // 下一节点处理人待办事项
+        bizTodoItemService.insertTodoItem(processInstanceId, entity, "leaveCounterSign");
+
         return processInstance;
     }
 

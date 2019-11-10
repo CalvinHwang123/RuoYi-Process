@@ -2,17 +2,37 @@
 
 >  闲鹿工作流是一款基于 RuoYi 4.x + Activiti 6.x + Spring Boot 2.x + Thymeleaf 3.x 的开源工作流管理系统~体验地址：http://47.96.25.96 
 >
-> 作为技术小菜鸟的我，一直对学习 Activiti 工作流框架求之不得，断断续续入门入了三次。这次能够写出这个项目主要归功于 ☕🐇 的[《Activiti 实战》](https://github.com/henryyan/activiti-in-action-codes)。这本书给予了我很大的帮助。最后但仍然重要的，我要感谢[若依框架](http://www.ruoyi.vip/)，她让我实现快速集成工作流 WEB 应用。—— from 一只闲鹿
+>  作为技术小菜鸟的我，一直对学习 Activiti 工作流框架求之不得，断断续续入门入了三次。这次能够写出这个项目主要归功于 ☕🐇 的[《Activiti 实战》](https://github.com/henryyan/activiti-in-action-codes)。这本书给予了我很大的帮助。最后但仍然重要的，我要感谢[若依框架](http://www.ruoyi.vip/)，她让我实现快速集成工作流 WEB 应用。—— from 一只闲鹿
 >
-> 参考资料👇
+>  参考资料👇
 >
-> 1. 若依框架: [http://www.ruoyi.vip](http://www.ruoyi.vip/)
-> 2. Activiti User Guide: <https://www.activiti.org/userguide/index.html#springSpringBoot>
-> 3. XBoot: [http://xboot.exrick.cn](http://xboot.exrick.cn/)
+>  1. 若依框架: [http://www.ruoyi.vip](http://www.ruoyi.vip/)
+>  2. 咖啡兔：[《Activiti 实战》](https://github.com/henryyan/activiti-in-action-codes)
+>  3. Activiti User Guide: <https://www.activiti.org/userguide/index.html#springSpringBoot>
+>  4. XBoot: [http://xboot.exrick.cn](http://xboot.exrick.cn/)
 
 
 
 ## 内置功能
+
+v1.2
+
+1. 新增首页待办事项列表、办理。
+2. 新增待办已办模块：待办列表、导出；已办列表、导出。
+3. 日期选择控制：只能选今天的；结束日期不能大于开始日期。
+4. 提交申请刷新父页面请假列表。
+5. 修复编辑查看请假类型反显出错。
+6. 修复选择会签参与人渲染闪屏。
+7. 流程用户不允许关联管理员。
+8. 管理员不允许提交流程申请。
+
+v1.1
+
+1. 请假表单必填项控制。
+2. 请假列表显示创建人、高亮申请人、分页修复。
+3. 流程定义导出问题修复、不允许删除存在流程实例的流程定义。
+4. 在线绘图部分界面汉化。
+5. 首页信息修改。
 
 v1.0
 
@@ -73,8 +93,15 @@ v1.0
         <td><img src="screenshot/process2.png"/></td>
         <td><img src="screenshot/select.png"/></td>
     </tr>
+    <tr>
+        <td><img src="screenshot/my-todo.png"/></td>
+        <td><img src="screenshot/handle.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="screenshot/todoitem.png"/></td>
+        <td><img src="screenshot/doneitem.png"/></td>
+    </tr>
 </table>
-
 
 
 
@@ -83,3 +110,6 @@ v1.0
 QQ群：794711759。
 
 ![闲鹿工作流交流群](ruoyi-admin/src/main/resources/static/img/qr_code.png)
+
+
+

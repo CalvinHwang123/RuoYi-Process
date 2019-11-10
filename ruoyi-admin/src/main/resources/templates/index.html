@@ -17,6 +17,7 @@
     <link th:href="@{/css/skins.css}" rel="stylesheet"/>
 <!--    <link th:href="@{/ruoyi/css/ry-ui.css?v=4.0.0}" rel="stylesheet"/>-->
     <link th:href="@{/ruoyi/css/ry-ui.css?v=} + ${version}" rel="stylesheet"/>
+		<link th:href="@{/css/shake.css}" rel="stylesheet"/>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden" th:classappend="|${@config.getKey('sys.index.sideTheme')} ${@config.getKey('sys.index.skinName')}|">
 <div id="wrapper">
@@ -36,7 +37,8 @@
             			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}">
             				<div class="hide" th:text="个人中心"></div>
 					        <div class="pull-left image">
-		                    	<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="img-circle" alt="User Image">
+<!--		                    	<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="img-circle" alt="User Image">-->
+		                    	<img th:src="(${#strings.isEmpty(user.avatar)}) ? @{/img/profile.jpg} : @{${user.avatar}}" class="img-circle" alt="User Image">
 					        </div>
 				        </a>
 				        <div class="pull-left info">
@@ -177,9 +179,12 @@
 				    <!--<li><a title="视频教程" href="http://doc.ruoyi.vip/#/standard/spjc" target="_blank"><i class="fa fa-video-camera"></i> 视频教程</a></li>
                     <li><a title="开发文档" href="http://doc.ruoyi.vip" target="_blank"><i class="fa fa-question-circle"></i> 开发文档</a></li>-->
 	                <li><a title="全屏显示" href="javascript:void(0)" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示</a></li>
+<!--									<li><a class="shake shake-slow menuItem" title="我的待办" th:href="@{/process/general/todoListView}" id="todoList"><i class="fa fa-tasks"></i><span style="color: yellow;"> 5 </span>待办</a></li>-->
+									<li><a class="shake shake-slow menuItem" title="我的待办" th:href="@{/process/todoitem/todoListView}" id="todoList"><i class="fa fa-tasks"></i> 我的待办</a></li>
                     <li class="dropdown user-menu">
 						<a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
-							<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="user-image">
+<!--							<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="user-image">-->
+							<img th:src="(${#strings.isEmpty(user.avatar)}) ? @{/img/profile.jpg} : @{${user.avatar}}" class="user-image">
 							<span class="hidden-xs">[[${user.userName}]]</span>
 						</a>
 						<ul class="dropdown-menu">

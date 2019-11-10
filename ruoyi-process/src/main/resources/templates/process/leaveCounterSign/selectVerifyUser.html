@@ -5,13 +5,13 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-leave-add">
+        <form class="form-horizontal m" id="form-leave-add" style="display: none;">
             <input type="hidden" name="users" />
             <div class="form-group">
                 <div class="col-sm-8">
                     <select id="selectUsers" class="form-control m-b select2-multiple" multiple>
                         </optgroup>
-                        <optgroup th:each="users: ${usersByGroup}" th:label="'--' + ${users['key']} + '--'">
+                        <optgroup th:each="users: ${usersByGroup}" th:label="'❤️❤️' + ${users['key']} + '❤️❤️'">
                             <option th:each="user: ${users['value']}" th:value="${user.id}" th:text="${user.firstName}"></option>
                         </optgroup>
                     </select>
@@ -24,6 +24,12 @@
     <th:block th:include="include :: select2-js" />
     <script th:inline="javascript">
         var prefix = ctx + "process/leaveCounterSign"
+
+        // 防止 select2 渲染延迟
+        setTimeout(function () {
+            $('#form-leave-add').css('display', '');
+        }, 100);
+
         $("#form-leave-add").validate({
             focusCleanup: true
         });
@@ -37,10 +43,15 @@
                     "id": id,
                     "users": users
                 };
-                $.operate.submit(url, "post", "json", data);
+                $.operate.submit(url, "post", "json", data, refreshParentPageTable);
                 $.modal.close();        // 关闭弹窗
-                $.table.refresh();      // 刷新表格
+                // $.table.refresh();      // 刷新表格
             });
+        }
+
+        // 请求结束后回调刷新父页面的表格
+        function refreshParentPageTable() {
+            window.parent.$.table.refresh();
         }
 
     </script>

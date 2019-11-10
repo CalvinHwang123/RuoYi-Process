@@ -15,7 +15,8 @@
                 </div>
                 <div class="ibox-content">
                     <div class="text-center">
-                        <p><img class="img-circle img-lg" th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}"></p>
+<!--                        <p><img class="img-circle img-lg" th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}"></p>-->
+                        <p><img class="img-circle img-lg" th:src="(${#strings.isEmpty(user.avatar)}) ? @{/img/profile.jpg} : @{${user.avatar}}"></p>
                         <p><a href="javascript:avatar()">修改头像</a></p>
                     </div>
                     <ul class="list-group list-group-striped">
@@ -43,7 +44,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-sm-9 about">
             <div class="ibox float-e-margins">
                 <div class="ibox-title ibox-title-gray dashboard-header">
@@ -100,7 +101,7 @@
                                     </div>
                                 </form>
                             </div>
-                            
+
                             <!--修改密码-->
                             <div class="tab-pane" id="modify_password">
                                 <form class="form-horizontal" id="form-user-resetPwd">
@@ -137,7 +138,7 @@
         </div>
     </div>
 	</section>
-    
+
     <th:block th:include="include :: footer" />
     <script>
 	    /*用户管理-头像*/
@@ -145,7 +146,7 @@
 	        var url = ctx + 'system/user/profile/avatar';
 	        $.modal.open("修改头像", url);
 	    }
-	    
+
 	    /*用户信息-修改*/
 	    $("#form-user-edit").validate({
 			onkeyup: false,
@@ -209,13 +210,13 @@
 		    },
 		    focusCleanup: true
 		});
-		
+
 		function submitUserInfo() {
 	        if ($.validate.form()) {
 	        	$.operate.saveModal(ctx + "system/user/profile/update", $('#form-user-edit').serialize());
 	        }
 	    }
-	    
+
 	    /*用户管理-修改密码*/
 	    $("#form-user-resetPwd").validate({
 	    	onkeyup: false,
@@ -261,7 +262,7 @@
 	        },
 	        focusCleanup: true
 		});
-		
+
 		function submitChangPassword () {
 	        if ($.validate.form("form-user-resetPwd")) {
 	        	$.operate.saveModal(ctx + "system/user/profile/resetPwd", $('#form-user-resetPwd').serialize());

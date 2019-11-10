@@ -28,7 +28,7 @@
                 <label class="col-sm-3 control-label">请假类型：</label>
                 <div class="col-sm-8">
                     <select name="type" class="form-control m-b" th:with="type=${@dict.getType('biz_leave_type')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${type}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{type}"></option>
                     </select>
                 </div>
             </div>
@@ -81,17 +81,19 @@
         });
 
         function submitHandler() {
-            if ($.validate.form()) {
+            if ($.validate.form() && validateStartTimeAndEndTime()) {
                 $.operate.save(prefix + "/edit", $('#form-leave-edit').serialize());
             }
         }
 
         $("input[name='startTime']").datetimepicker({
-            autoclose: true
+            autoclose: true,
+            startDate: new Date()
         });
 
         $("input[name='endTime']").datetimepicker({
-            autoclose: true
+            autoclose: true,
+            startDate: new Date()
         });
 
         // 监听开始和结束日期填写，动态生成请假时长
@@ -99,10 +101,12 @@
             if (!$('input[name="startTime"]').val() || !$('input[name="endTime"]').val()) {
                 return;
             }
-            var totalSecond = $.common.calcTotalSecond($('input[name="startTime"]').val(), $('input[name="endTime"]').val());
-            $('input[name="totalTime"]').val(totalSecond);
-            var dateSub = $.common.formatTotalDateSub(totalSecond);
-            $('input[name="totalTimeText"]').val(dateSub);
+            if (validateStartTimeAndEndTime()) {
+                var totalSecond = $.common.calcTotalSecond($('input[name="startTime"]').val(), $('input[name="endTime"]').val());
+                $('input[name="totalTime"]').val(totalSecond);
+                var dateSub = $.common.formatTotalDateSub(totalSecond);
+                $('input[name="totalTimeText"]').val(dateSub);
+            }
         });
 
         $(function () {
@@ -110,6 +114,14 @@
             var dateSub = $.common.formatTotalDateSub(leave.totalTime);
             $('input[name="totalTimeText"]').val(dateSub);
         });
+
+        function validateStartTimeAndEndTime() {
+            if ($('input[name="startTime"]').val() >= $('input[name="endTime"]').val()) {
+                $.modal.alertWarning("结束时间必须大于开始时间");
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>

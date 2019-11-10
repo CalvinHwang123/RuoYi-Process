@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.process.todoitem.mapper.BizTodoItemMapper">
+
+    <resultMap type="BizTodoItem" id="BizTodoItemResult">
+        <result property="id"    column="id"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="itemContent"    column="item_content"    />
+        <result property="module"    column="module"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="nodeName"    column="node_name"    />
+        <result property="isView"    column="is_view"    />
+        <result property="isHandle"    column="is_handle"    />
+        <result property="todoUserId"    column="todo_user_id"    />
+        <result property="todoUserName"    column="todo_user_name"    />
+        <result property="handleUserId"    column="handle_user_id"    />
+        <result property="handleUserName"    column="handle_user_name"    />
+        <result property="todoTime"    column="todo_time"    />
+        <result property="handleTime"    column="handle_time"    />
+    </resultMap>
+
+    <sql id="selectBizTodoItemVo">
+        select id, item_name, item_content, module, task_id, task_name, node_name, is_view, is_handle, todo_user_id, todo_user_name, handle_user_id, handle_user_name, todo_time, handle_time from biz_todo_item
+    </sql>
+
+    <select id="selectBizTodoItemList" parameterType="BizTodoItem" resultMap="BizTodoItemResult">
+        <include refid="selectBizTodoItemVo"/>
+        <where>
+            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="itemContent != null  and itemContent != ''"> and item_content = #{itemContent}</if>
+            <if test="module != null  and module != ''"> and module = #{module}</if>
+            <if test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="nodeName != null  and nodeName != ''"> and node_name like concat('%', #{nodeName}, '%')</if>
+            <if test="isView != null  and isView != ''"> and is_view = #{isView}</if>
+            <if test="isHandle != null  and isHandle != ''"> and is_handle = #{isHandle}</if>
+            <if test="todoUserId != null and todoUserId != ''"> and todo_user_id like concat('%', #{todoUserId}, '%')</if>
+            <if test="todoUserName != null  and todoUserName != ''"> and todo_user_name like concat('%', #{todoUserName}, '%')</if>
+            <if test="handleUserId != null and handleUserId != ''"> and handle_user_id like concat('%', #{handleUserId}, '%')</if>
+            <if test="handleUserName != null  and handleUserName != ''"> and handle_user_name like concat('%', #{handleUserName}, '%')</if>
+            <if test="todoTime != null "> and todo_time = #{todoTime}</if>
+            <if test="handleTime != null "> and handle_time = #{handleTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBizTodoItemById" parameterType="Long" resultMap="BizTodoItemResult">
+        <include refid="selectBizTodoItemVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBizTodoItem" parameterType="BizTodoItem" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_todo_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemName != null  and itemName != ''">item_name,</if>
+            <if test="itemContent != null  and itemContent != ''">item_content,</if>
+            <if test="module != null  and module != ''">module,</if>
+            <if test="taskId != null  and taskId != ''">task_id,</if>
+            <if test="taskName != null  and taskName != ''">task_name,</if>
+            <if test="nodeName != null  and nodeName != ''">node_name,</if>
+            <if test="isView != null  and isView != ''">is_view,</if>
+            <if test="isHandle != null  and isHandle != ''">is_handle,</if>
+            <if test="todoUserId != null ">todo_user_id,</if>
+            <if test="todoUserName != null  and todoUserName != ''">todo_user_name,</if>
+            <if test="handleUserId != null ">handle_user_id,</if>
+            <if test="handleUserName != null  and handleUserName != ''">handle_user_name,</if>
+            <if test="todoTime != null ">todo_time,</if>
+            <if test="handleTime != null ">handle_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemName != null  and itemName != ''">#{itemName},</if>
+            <if test="itemContent != null  and itemContent != ''">#{itemContent},</if>
+            <if test="module != null  and module != ''">#{module},</if>
+            <if test="taskId != null  and taskId != ''">#{taskId},</if>
+            <if test="taskName != null  and taskName != ''">#{taskName},</if>
+            <if test="nodeName != null  and nodeName != ''">#{nodeName},</if>
+            <if test="isView != null  and isView != ''">#{isView},</if>
+            <if test="isHandle != null  and isHandle != ''">#{isHandle},</if>
+            <if test="todoUserId != null ">#{todoUserId},</if>
+            <if test="todoUserName != null  and todoUserName != ''">#{todoUserName},</if>
+            <if test="handleUserId != null ">#{handleUserId},</if>
+            <if test="handleUserName != null  and handleUserName != ''">#{handleUserName},</if>
+            <if test="todoTime != null ">#{todoTime},</if>
+            <if test="handleTime != null ">#{handleTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizTodoItem" parameterType="BizTodoItem">
+        update biz_todo_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemName != null  and itemName != ''">item_name = #{itemName},</if>
+            <if test="itemContent != null  and itemContent != ''">item_content = #{itemContent},</if>
+            <if test="module != null  and module != ''">module = #{module},</if>
+            <if test="taskId != null  and taskId != ''">task_id = #{taskId},</if>
+            <if test="taskName != null  and taskName != ''">task_name = #{taskName},</if>
+            <if test="nodeName != null  and nodeName != ''">node_name = #{nodeName},</if>
+            <if test="isView != null  and isView != ''">is_view = #{isView},</if>
+            <if test="isHandle != null  and isHandle != ''">is_handle = #{isHandle},</if>
+            <if test="todoUserId != null ">todo_user_id = #{todoUserId},</if>
+            <if test="todoUserName != null  and todoUserName != ''">todo_user_name = #{todoUserName},</if>
+            <if test="handleUserId != null ">handle_user_id = #{handleUserId},</if>
+            <if test="handleUserName != null  and handleUserName != ''">handle_user_name = #{handleUserName},</if>
+            <if test="todoTime != null ">todo_time = #{todoTime},</if>
+            <if test="handleTime != null ">handle_time = #{handleTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizTodoItemById" parameterType="Long">
+        delete from biz_todo_item where id = #{id}
+    </delete>
+
+    <delete id="deleteBizTodoItemByIds" parameterType="String">
+        delete from biz_todo_item where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

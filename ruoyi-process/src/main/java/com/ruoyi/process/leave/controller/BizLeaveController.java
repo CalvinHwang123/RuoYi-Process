@@ -1,4 +1,4 @@
-package com.ruoyi.process.web.controller.process;
+package com.ruoyi.process.leave.controller;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -10,6 +10,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.process.leave.domain.BizLeaveVo;
 import com.ruoyi.process.leave.service.IBizLeaveService;
+import com.ruoyi.system.domain.SysUser;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -99,6 +100,10 @@ public class BizLeaveController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizLeaveVo bizLeave) {
+        Long userId = ShiroUtils.getUserId();
+        if (SysUser.isAdmin(userId)) {
+            return error("提交申请失败：不允许管理员提交申请！");
+        }
         return toAjax(bizLeaveService.insertBizLeave(bizLeave));
     }
 
@@ -141,8 +146,7 @@ public class BizLeaveController extends BaseController {
     @PostMapping( "/submitApply")
     @ResponseBody
     public AjaxResult submitApply(Long id) {
-        BizLeaveVo leave = new BizLeaveVo();
-        leave.setId(id);
+        BizLeaveVo leave = bizLeaveService.selectBizLeaveById(id);
         String applyUserId = ShiroUtils.getLoginName();
         bizLeaveService.submitApply(leave, applyUserId);
         return success();
@@ -227,6 +231,7 @@ public class BizLeaveController extends BaseController {
                 taskService.addComment(taskId, leave.getInstanceId(), comment);
             }
             bizLeaveService.complete(leave, saveEntityBoolean, taskId, variables);
+
             return success("任务已完成");
         } catch (Exception e) {
             logger.error("error on complete task {}, variables={}", new Object[]{taskId, variables, e});

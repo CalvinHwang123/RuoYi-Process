@@ -10,6 +10,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.process.leave.domain.BizLeaveVo;
 import com.ruoyi.process.leavecountersign.service.IBizLeaveCounterSignService;
+import com.ruoyi.system.domain.SysUser;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -98,6 +99,10 @@ public class BizLeaveCounterSignController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(BizLeaveVo bizLeave) {
+        Long userId = ShiroUtils.getUserId();
+        if (SysUser.isAdmin(userId)) {
+            return error("提交申请失败：不允许管理员提交申请！");
+        }
         return toAjax(bizLeaveService.insertBizLeave(bizLeave));
     }
 
