@@ -23,7 +23,7 @@
     <th:block th:include="include :: datetimepicker-js" />
     <th:block th:include="include :: select2-js" />
     <script th:inline="javascript">
-        var prefix = ctx + "process/leaveCounterSign"
+        var prefix = ctx + "process/leaveCounterSign";
 
         // 防止 select2 渲染延迟
         setTimeout(function () {

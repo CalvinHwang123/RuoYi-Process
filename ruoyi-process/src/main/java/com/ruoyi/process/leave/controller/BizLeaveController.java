@@ -56,7 +56,8 @@ public class BizLeaveController extends BaseController {
 
     @RequiresPermissions("process:leave:view")
     @GetMapping()
-    public String leave() {
+    public String leave(ModelMap mmap) {
+        mmap.put("currentUser", ShiroUtils.getSysUser());
         return prefix + "/leave";
     }
 
@@ -67,6 +68,9 @@ public class BizLeaveController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizLeaveVo bizLeave) {
+        if (!SysUser.isAdmin(ShiroUtils.getUserId())) {
+            bizLeave.setCreateBy(ShiroUtils.getLoginName());
+        }
         startPage();
         List<BizLeaveVo> list = bizLeaveService.selectBizLeaveList(bizLeave);
         return getDataTable(list);

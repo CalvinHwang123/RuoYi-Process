@@ -44,15 +44,15 @@
                             </li>
                             <li class="select-time">
                                 <p>通知时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTodoTime]"/>
+                                <input type="text" class="time-input" id="todoItemStartTime" placeholder="开始时间" name="params[todoItemStartTime]"/>
                                 <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTodoTime]"/>
+                                <input type="text" class="time-input" id="todoItemEndTime" placeholder="结束时间" name="params[todoItemEndTime]"/>
                             </li>
                             <li class="select-time">
                                 <p>处理时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginHandleTime]"/>
+                                <input type="text" class="time-input" id="handleStartTime" placeholder="开始时间" name="params[handleStartTime]"/>
                                 <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endHandleTime]"/>
+                                <input type="text" class="time-input" id="handleEndTime" placeholder="结束时间" name="params[handleEndTime]"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -77,6 +77,7 @@
     <script th:inline="javascript">
         var removeFlag = [[${@permission.hasPermi('process:todoitem:remove')}]];
         var prefix = ctx + "process/todoitem";
+        var currentUser = [[${currentUser}]];
 
         $(function() {
             var options = {
@@ -159,7 +160,7 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="showVerifyDialog(\'' + row.taskId + '\', \'' + row.module + '\', \'' + row.taskName + '\', \'' + row.nodeName + '\')"><i class="fa fa-edit"></i> 办理</a> ');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="showVerifyDialog(\'' + row.taskId + '\', \'' + row.module + '\', \'' + row.taskName + '\', \'' + row.nodeName + '\', \'' + row.todoUserId + '\')"><i class="fa fa-edit"></i> 办理</a> ');
                         return actions.join('');
                     }
                 }]
@@ -167,7 +168,11 @@
             $.table.init(options);
         });
 
-        function showVerifyDialog(taskId, module, pageName, nodeName) {
+        function showVerifyDialog(taskId, module, pageName, nodeName, todoUserId) {
+            if (todoUserId !== currentUser.loginName) {
+                $.modal.alertWarning("不允许非待办人办理待办事项！");
+                return;
+            }
             var url = prefix + "/showVerifyDialog/" + taskId + "?module=" + module + "&formPageName=" + pageName;
             $.modal.open(nodeName, url);
         }

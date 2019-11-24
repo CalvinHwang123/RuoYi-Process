@@ -43,6 +43,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="handleUserName != null  and handleUserName != ''"> and handle_user_name like concat('%', #{handleUserName}, '%')</if>
             <if test="todoTime != null "> and todo_time = #{todoTime}</if>
             <if test="handleTime != null "> and handle_time = #{handleTime}</if>
+            <if test="params.todoItemStartTime != null and params.todoItemStartTime != ''"><!-- 开始时间检索 -->
+                and date_format(todo_time,'%y%m%d') &gt;= date_format(#{params.todoItemStartTime},'%y%m%d')
+            </if>
+            <if test="params.todoItemEndTime != null and params.todoItemEndTime != ''"><!-- 结束时间检索 -->
+                and date_format(todo_time,'%y%m%d') &lt;= date_format(#{params.todoItemEndTime},'%y%m%d')
+            </if>
+            <if test="params.handleStartTime != null and params.handleStartTime != ''"><!-- 开始时间检索 -->
+                and date_format(handle_time,'%y%m%d') &gt;= date_format(#{params.handleStartTime},'%y%m%d')
+            </if>
+            <if test="params.handleEndTime != null and params.handleEndTime != ''"><!-- 结束时间检索 -->
+                and date_format(handle_time,'%y%m%d') &lt;= date_format(#{params.handleEndTime},'%y%m%d')
+            </if>
+                order by todo_time desc
         </where>
     </select>
 

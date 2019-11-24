@@ -38,7 +38,7 @@ import java.util.Map;
 
 /**
  * 权限配置加载
- * 
+ *
  * @author ruoyi
  */
 @Configuration
@@ -261,6 +261,8 @@ public class ShiroConfig
 
         // 在线流程图放行
         filterChainDefinitionMap.put("/bpmn/**", "anon");
+        // activiti modeler 放行
+        filterChainDefinitionMap.put("/modeler/**", "anon");
 
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("onlineSession", onlineSessionFilter());

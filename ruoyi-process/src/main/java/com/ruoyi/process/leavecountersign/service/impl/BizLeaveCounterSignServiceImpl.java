@@ -93,13 +93,6 @@ public class BizLeaveCounterSignServiceImpl implements IBizLeaveCounterSignServi
         Page<BizLeaveVo> list = (Page<BizLeaveVo>) bizLeaveMapper.selectBizLeaveList(bizLeave);
         Page<BizLeaveVo> returnList = new Page<>();
         for (BizLeaveVo leave: list) {
-            // 条件过滤
-            if (!SysUser.isAdmin(ShiroUtils.getUserId())) {
-                if (!leave.getCreateBy().equals(ShiroUtils.getLoginName())) {
-                    continue;
-                }
-            }
-
             SysUser sysUser = userMapper.selectUserByLoginName(leave.getCreateBy());
             if (sysUser != null) {
                 leave.setCreateUserName(sysUser.getUserName());

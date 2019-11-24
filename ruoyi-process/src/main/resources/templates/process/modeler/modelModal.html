@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('创建新模型')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-model-edit">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>KEY：</label>
+                <div class="col-sm-8">
+                    <input name="key" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">描述：</label>
+                <div class="col-sm-8">
+                    <textarea name="description" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "process/modeler";
+        $("#form-group-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $('#form-model-edit').serializeArray();
+                var userIds = $.form.selectSelects("user");
+                $.operate.save(prefix + "/create", data, successCallback);
+            }
+        }
+
+        function successCallback(result) {
+            // $.modal.openTab("模型在线设计", prefix + "/modeler.html?modelId=" + result.data);
+            createMyMenuItem("/modeler/modeler.html?modelId=" + result.data, "模型在线设计");
+        }
+
+        function createMyMenuItem(dataUrl, menuName) {
+            var panelUrl = window.parent.frameElement.getAttribute('data-id');
+            dataIndex = $.common.random(1,100), flag = true;
+            if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
+            var topWindow = $(window.parent.parent.document);
+            // 选项卡菜单不存在
+            if (flag) {
+                var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+                $('.menuTab', topWindow).removeClass('active');
+
+                // 添加选项卡对应的iframe
+                var str1 = '<iframe class="RuoYi_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" seamless></iframe>';
+                $('.mainContent', topWindow).find('iframe.RuoYi_iframe').hide().parents('.mainContent').append(str1);
+
+                // 添加选项卡
+                $('.menuTabs .page-tabs-content', topWindow).append(str);
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>

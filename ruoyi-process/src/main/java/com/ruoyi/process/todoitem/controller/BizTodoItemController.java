@@ -78,7 +78,8 @@ public class BizTodoItemController extends BaseController {
 
     @RequiresPermissions("process:todoitem:view")
     @GetMapping()
-    public String todoitem() {
+    public String todoitem(ModelMap mmap) {
+        mmap.put("currentUser", ShiroUtils.getSysUser());
         return prefix + "/todoitem";
     }
 

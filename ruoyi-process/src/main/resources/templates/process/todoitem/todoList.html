@@ -25,7 +25,7 @@
                              </p>
                              <a href="javascript:void(0)" class="btn btn-sm btn-primary" th:onclick="showVerifyDialog([[${todoItem.taskId}]], [[${todoItem.module}]], [[${todoItem.taskName}]], [[${todoItem.nodeName}]])"> 办理</a>
                              <span class="vertical-date">
-                         	<!--今天--> <br>
+                         	<!--今天--><!--<span id="todoTimeSpan" th:text="${#dates.format(todoItem.todoTime, 'yyyy-MM-dd HH:mm:ss')}"></span>--> <br>
                          <small th:text="${#dates.format(todoItem.todoTime, 'yyyy-MM-dd HH:mm:ss')}"></small>
                      </span>
                          </div>
@@ -38,12 +38,45 @@
     <script>
         var prefix = ctx + "process/todoitem";
         $(document).ready(function(){
+          // transDate();
         });
 
         function showVerifyDialog(taskId, module, pageName, nodeName) {
             var url = prefix + "/showVerifyDialog/" + taskId + "?module=" + module + "&formPageName=" + pageName;
             $.modal.open(nodeName, url);
         }
+
+        function transDate() {
+          var $time =document.getElementById("todoTimeSpan");
+          var date = $time.innerHTML.trim();
+          date = new Date(date);
+          var tt = date;
+          var days = parseInt((new Date().getTime() - date) / 86400000);
+          var today = new Date().getDate();
+          var year = tt.getFullYear();
+          var mouth = tt.getMonth() + 1;
+          var day = tt.getDate();
+          var time = tt.getHours() < 10 ? "0" + tt.getHours() : tt.getHours();
+          var min = tt.getMinutes() < 10 ? "0" + tt.getMinutes() : tt.getMinutes();
+          var result, offset;
+          offset = Math.abs(today - day);
+          if (days < 4&&offset<4) {
+            if (offset === 0) {
+              result = "今天" + time + ":" + min;
+            } else if (offset === 1) {
+              result = "昨天" + time + ":" + min;
+            } else if (offset === 2) {
+              result = "前天" + time + ":" + min;
+            } else if (offset === 2) {
+              result = "3天前" + time + ":" + min;
+            }
+          } else {
+            // result = year + "-" + mouth + "-" + day + " " + time + ":" + min;
+            result = "3天以前";
+          }
+          $time.innerHTML = result;
+        }
+
     </script>
 </body>
 </html>

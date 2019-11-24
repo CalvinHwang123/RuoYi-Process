@@ -61,6 +61,7 @@
         var removeFlag = [[${@permission.hasPermi('process:leave:remove')}]];
         var prefix = ctx + "process/leaveCounterSign";
         var datas = [[${@dict.getType('biz_leave_type')}]];
+        var currentUser = [[${currentUser}]];
 
         $(function() {
             var options = {
@@ -165,9 +166,9 @@
                             actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showHistoryDialog(\'' + row.instanceId + '\')"><i class="fa fa-list"></i> 审批历史</a> ');
                             actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showProcessImgDialog(\'' + row.instanceId + '\')"><i class="fa fa-image"></i> 进度查看</a> ');
                         } else {
-                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="showSelectVerifyUserDialog(\'' + row.id + '\')"><i class="fa fa-user"></i> 提交申请</a> ');
-                            actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i> 删除</a>');
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="showSelectVerifyUserDialog(\'' + row.id + '\',\'' + row.createBy + '\')"><i class="fa fa-user"></i> 提交申请</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editForm(\'' + row.id + '\',\'' + row.createBy + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="removeForm(\'' + row.id + '\',\'' + row.createBy + '\')"><i class="fa fa-remove"></i> 删除</a>');
                         }
                         return actions.join('');
                     }
@@ -176,9 +177,29 @@
             $.table.init(options);
         });
 
-        function showSelectVerifyUserDialog(id) {
+        function showSelectVerifyUserDialog(id, createBy) {
+            if (createBy !== currentUser.loginName) {
+                $.modal.alertWarning("不允许非创建人提交申请！");
+                return;
+            }
             var url = ctx + 'process/leaveCounterSign/selectVerifyUser/' + id;
             $.modal.open("选择审批参与人", url, 400, window.innerHeight / 1.5);
+        }
+
+        function editForm(id, createBy) {
+            if (createBy !== currentUser.loginName) {
+                $.modal.alertWarning("不允许非创建人编辑表单！");
+                return;
+            }
+            $.operate.edit(id);
+        }
+
+        function removeForm(id, createBy) {
+            if (createBy !== currentUser.loginName) {
+                $.modal.alertWarning("不允许非创建人删除表单！");
+                return;
+            }
+            $.operate.remove(id);
         }
 
         /* 查看审批历史 */

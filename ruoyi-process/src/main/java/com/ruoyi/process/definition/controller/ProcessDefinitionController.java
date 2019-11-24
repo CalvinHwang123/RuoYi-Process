@@ -12,17 +12,14 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.process.definition.domain.ProcessDefinition;
 import com.ruoyi.process.definition.service.ProcessDefinitionService;
-import org.activiti.engine.task.Task;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -110,66 +107,6 @@ public class ProcessDefinitionController extends BaseController {
         List<ProcessDefinition> list = processDefinitionService.listProcessDefinition(new ProcessDefinition());
         ExcelUtil<ProcessDefinition> util = new ExcelUtil<>(ProcessDefinition.class);
         return util.exportExcel(list, "流程定义数据");
-    }
-
-//    @RequestMapping(value="/process", method= RequestMethod.POST)
-//    public void startProcessInstance(@RequestBody StartProcessRepresentation startProcessRepresentation) {
-//        myService.startProcess(startProcessRepresentation.getAssignee());
-////        myService.startProcess();
-//    }
-
-    @RequestMapping(value="/process", method= RequestMethod.GET)
-    public void startProcessInstance(@RequestParam String assignee) {
-        processDefinitionService.startProcess(assignee);
-//        myService.startProcess();
-    }
-
-    @RequestMapping(value="/tasks", method= RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
-    public List<TaskRepresentation> getTasks(@RequestParam String assignee) {
-        List<Task> tasks = processDefinitionService.getTasks(assignee);
-        List<TaskRepresentation> dtos = new ArrayList<TaskRepresentation>();
-        for (Task task : tasks) {
-            dtos.add(new TaskRepresentation(task.getId(), task.getName()));
-        }
-        return dtos;
-    }
-
-    static class StartProcessRepresentation {
-
-        private String assignee;
-
-        public String getAssignee() {
-            return assignee;
-        }
-
-        public void setAssignee(String assignee) {
-            this.assignee = assignee;
-        }
-    }
-
-    static class TaskRepresentation {
-
-        private String id;
-        private String name;
-
-        public TaskRepresentation(String id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-         public String getId() {
-            return id;
-        }
-        public void setId(String id) {
-            this.id = id;
-        }
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-
     }
 
 }

@@ -25,7 +25,7 @@
   <div class="col-sm-5">
     <h2>闲鹿工作流管理系统</h2>
     <p>闲鹿工作流是一款基于 RuoYi 4.x + Activiti 6.x + Spring Boot 2.x + Thymeleaf 3.x 的开源工作流管理系统~体验地址：<a
-      href="http://47.96.25.96" target="_blank">http://47.96.25.96</a></p>
+      href="http://proc.iloveu4ever.vip" target="_blank">http://proc.iloveu4ever.vip</a></p>
     <p>作为技术小菜鸟的我，一直对学习 Activiti 工作流框架求之不得，断断续续入门入了三次。这次能够写出这个项目主要归功于 ☕🐇 的<a
       href="https://github.com/henryyan/activiti-in-action-codes" target="_blank">《Activiti 实战》</a>。这本书给予了我很大的帮助。最后但仍然重要的，我要感谢<a
       href="http://www.ruoyi.vip" target="_blank">若依框架</a>，她让我实现快速集成工作流 WEB 应用。—— from 一只闲鹿</p>
@@ -58,7 +58,7 @@
     <ol>
       <li>流程框架：<a href="https://www.activiti.org/" target="_blank">Activiti 6.x</a></li>
       <li>核心框架：Spring Boot 2.x</li>
-      <li>在线绘图：<a href="https://github.com/bpmn-io/bpmn-js" target="_blank">bpmn-js</a></li>
+      <li><s>在线绘图：<a href="https://github.com/bpmn-io/bpmn-js" target="_blank">bpmn-js</a></s></li>
       <li>模板引擎：Thymeleaf 3.x</li>
       <li>更多……</li>
     </ol>
@@ -83,11 +83,11 @@
 
         </div>
         <div class="ibox-content">
-          <p><i class="fa fa-qq"></i> QQ群：<a href="javascript:;">/ 794711759</a>
+          <p><i class="fa fa-group"></i> QQ群：<a href="javascript:;">794711759</a>
           </p>
-          <p><i class="fa fa-weixin"></i> 微信：<a href="javascript:;">/ huangluqian12345</a>
+          <p><i class="fa fa-weixin"></i> 微信：<a href="javascript:;">huangluqian12345</a>
           </p>
-          <p><i class="fa fa-credit-card"></i> QQ：<a href="javascript:;" class="支付宝信息">/ 1055202292</a>
+          <p><i class="fa fa-qq"></i> QQ：<a href="javascript:;">1055202292</a>
           </p>
         </div>
       </div>
@@ -103,10 +103,26 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h5 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#version" href="#v13">v1.3</a><code class="pull-right">2019.11.24</code>
+                  </h5>
+                </div>
+                <div id="v13" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    <ol>
+                      <li>新增模型管理功能：支持模型列表、编辑、部署、导出和删除。</li>
+                      <li>移除 bpmn-js 在线绘图；集成 Activiti Modeler 在线绘图。</li>
+                      <li>不允许非待办人办理待办事项。</li>
+                      <li>不允许非创建人编辑、删除、提交相应表单。</li>
+                      <li>请假列表查询，分页问题修复。</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="panel-heading">
+                  <h5 class="panel-title">
                     <a data-toggle="collapse" data-parent="#version" href="#v12">v1.2</a><code class="pull-right">2019.11.10</code>
                   </h5>
                 </div>
-                <div id="v12" class="panel-collapse collapse in">
+                <div id="v12" class="panel-collapse collapse">
                   <div class="panel-body">
                     <ol>
                       <li>新增首页待办事项列表、办理。</li>
@@ -138,7 +154,7 @@
                 </div>
                 <div class="panel-heading">
                   <h5 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#version" href="#v10">v1.0 闲鹿工作流正式发布</a><code
+                    <a data-toggle="collapse" data-parent="#version" href="#v10">v1.0</a><code
                     class="pull-right">2019.10.31</code>
                   </h5>
                 </div>
@@ -152,6 +168,7 @@
                       <li>新增流程用户功能，支持流程用户列表、新增、编辑、删除和导出。</li>
                       <li>新增流程定义功能，支持流程定义部署、列表、删除和导出。</li>
                       <li>新增在线绘图功能，支持拖拽预览、在线绘图、下载 BPMN 文件和 SVG 文件。</li>
+                      <li>v1.0 闲鹿工作流正式发布。</li>
                     </ol>
                   </div>
                 </div>

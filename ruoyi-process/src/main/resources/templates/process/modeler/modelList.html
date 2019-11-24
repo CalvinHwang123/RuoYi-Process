@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流程模型列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>KEY：</p>
+                                <input type="text" name="key"/>
+                            </li>
+                            <li>
+                                <p>名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <!--<li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="craateStartTime" placeholder="开始时间" name="params[craateStartTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="createEndTime" placeholder="结束时间" name="params[createEndTime]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>最后更新时间：</p>
+                                <input type="text" class="time-input" id="lastUpdateStartTime" placeholder="开始时间" name="params[lastUpdateStartTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="lastUpdateEndHandleTime" placeholder="结束时间" name="params[lastUpdateEndHandleTime]"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="process:todoitem:export">
+                    <i class="fa fa-plus"></i> 创建新模型
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var removeFlag = [[${@permission.hasPermi('process:todoitem:remove')}]];
+        var prefix = ctx + "process/modeler";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/addModal",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "流程模型",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : 'ID'
+                },
+                {
+                    field : 'key',
+                    title : 'KEY'
+                },
+                {
+                    field : 'name',
+                    title : '名称'
+                },
+                {
+                    field : 'version',
+                    title : '版本'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                },
+                {
+                    field : 'lastUpdateTime',
+                    title : '最后更新时间'
+                },
+                {
+                    field : 'metaInfo',
+                    title : '元数据'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="successCallback(\'' + row.id + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="deployModel(\'' + row.id + '\')"><i class="fa fa-cloud-upload"></i> 部署</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="export2Bpmn(\'' + row.id + '\')"><i class="fa fa-download"></i> 导出</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i> 删除</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function showVerifyDialog(taskId, module, pageName, nodeName, todoUserId) {
+            if (todoUserId !== currentUser.loginName) {
+                $.modal.alertWarning("不允许非待办人办理待办事项！");
+                return;
+            }
+            var url = prefix + "/showVerifyDialog/" + taskId + "?module=" + module + "&formPageName=" + pageName;
+            $.modal.open(nodeName, url);
+        }
+
+        function export2Bpmn(modelId) {
+            // $.operate.submit(prefix + "/export/" + modelId, "get", "", "");
+
+            window.location.href = prefix + "/export/" + modelId;
+
+            // $.modal.loading("正在导出数据，请稍后...");
+            // $.post(prefix + "/export/" + modelId, "", function(result) {
+            //     if (result.code == web_status.SUCCESS) {
+            //         window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            //     } else if (result.code == web_status.WARNING) {
+            //         $.modal.alertWarning(result.msg)
+            //     } else {
+            //         $.modal.alertError(result.msg);
+            //     }
+            //     $.modal.closeLoading();
+            // });
+        }
+
+        function successCallback(modelId) {
+            createMyMenuItem("/modeler/modeler.html?modelId=" + modelId, "模型在线设计");
+        }
+
+        function createMyMenuItem(dataUrl, menuName) {
+            var panelUrl = window.frameElement.getAttribute('data-id');
+            dataIndex = $.common.random(1,100), flag = true;
+            if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
+            var topWindow = $(window.parent.document);
+            // 选项卡菜单不存在
+            if (flag) {
+                var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '" data-panel="' + panelUrl + '">' + menuName + ' <i class="fa fa-times-circle"></i></a>';
+                $('.menuTab', topWindow).removeClass('active');
+
+                // 添加选项卡对应的iframe
+                var str1 = '<iframe class="RuoYi_iframe" name="iframe' + dataIndex + '" width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" data-panel="' + panelUrl + '" seamless></iframe>';
+                $('.mainContent', topWindow).find('iframe.RuoYi_iframe').hide().parents('.mainContent').append(str1);
+
+                // 添加选项卡
+                $('.menuTabs .page-tabs-content', topWindow).append(str);
+            }
+            return false;
+        }
+
+        function deployModel(modelId) {
+            $.modal.confirm("确认要部署至流程定义吗?", function() {
+                $.post(prefix + "/deploy/" + modelId, "", function(result) {
+                    $.modal.msgSuccess(result.msg);
+                });
+            });
+
+
+        }
+    </script>
+</body>
+</html>

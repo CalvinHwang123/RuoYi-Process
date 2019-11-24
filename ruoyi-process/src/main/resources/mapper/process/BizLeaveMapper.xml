@@ -35,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null "> and end_time = #{endTime}</if>
             <if test="totalTime != null "> and total_time = #{totalTime}</if>
             <if test="instanceId != null  and instanceId != ''"> and instance_id = #{instanceId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and date_format(start_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>

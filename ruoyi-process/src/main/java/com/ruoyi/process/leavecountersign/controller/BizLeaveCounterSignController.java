@@ -55,7 +55,8 @@ public class BizLeaveCounterSignController extends BaseController {
 
     @RequiresPermissions("process:leaveCounterSign:view")
     @GetMapping()
-    public String leave() {
+    public String leave(ModelMap mmap) {
+        mmap.put("currentUser", ShiroUtils.getSysUser());
         return prefix + "/leave";
     }
 
@@ -66,6 +67,9 @@ public class BizLeaveCounterSignController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(BizLeaveVo bizLeave) {
+        if (!SysUser.isAdmin(ShiroUtils.getUserId())) {
+            bizLeave.setCreateBy(ShiroUtils.getLoginName());
+        }
         startPage();
         List<BizLeaveVo> list = bizLeaveService.selectBizLeaveList(bizLeave);
         return getDataTable(list);
@@ -158,8 +162,7 @@ public class BizLeaveCounterSignController extends BaseController {
     @PostMapping( "/submitApply")
     @ResponseBody
     public AjaxResult submitApply(Long id, HttpServletRequest request, @RequestParam("users[]") String[] users) {
-        BizLeaveVo leave = new BizLeaveVo();
-        leave.setId(id);
+        BizLeaveVo leave = bizLeaveService.selectBizLeaveById(id);
         String applyUserId = ShiroUtils.getLoginName();
 
         Map<String, Object> variables = new HashMap<String, Object>();

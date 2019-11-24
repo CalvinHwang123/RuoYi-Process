@@ -1,6 +1,6 @@
 ## 平台简介
 
->  闲鹿工作流是一款基于 RuoYi 4.x + Activiti 6.x + Spring Boot 2.x + Thymeleaf 3.x 的开源工作流管理系统~体验地址：http://47.96.25.96 
+>  闲鹿工作流是一款基于 RuoYi 4.x + Activiti 6.x + Spring Boot 2.x + Thymeleaf 3.x 的开源工作流管理系统~体验地址：http://proc.iloveu4ever.vip 
 >
 >  作为技术小菜鸟的我，一直对学习 Activiti 工作流框架求之不得，断断续续入门入了三次。这次能够写出这个项目主要归功于 ☕🐇 的[《Activiti 实战》](https://github.com/henryyan/activiti-in-action-codes)。这本书给予了我很大的帮助。最后但仍然重要的，我要感谢[若依框架](http://www.ruoyi.vip/)，她让我实现快速集成工作流 WEB 应用。—— from 一只闲鹿
 >
@@ -14,6 +14,14 @@
 
 
 ## 内置功能
+
+v1.3
+
+1. 新增模型管理功能：支持模型列表、编辑、部署、导出和删除。
+2. 移除 bpmn-js 在线绘图；集成 Activiti Modeler 在线绘图。
+3. 不允许非待办人办理待办事项。
+4. 不允许非创建人编辑、删除、提交相应表单。
+5. 请假列表查询，分页问题修复。
 
 v1.2
 
@@ -54,7 +62,7 @@ v1.0
 >
 > 人事：rensm / 123456
 
-演示地址：http://47.96.25.96  (服务器太渣，时常宕机，推荐运行本地 demo)
+演示地址：http://proc.iloveu4ever.vip (服务器太渣，时常宕机，推荐运行本地 demo)
 
 
 
@@ -100,6 +108,10 @@ v1.0
     <tr>
         <td><img src="screenshot/todoitem.png"/></td>
         <td><img src="screenshot/doneitem.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="screenshot/modellist.png"/></td>
+        <td><img src="screenshot/modeler.png"/></td>
     </tr>
 </table>
 
