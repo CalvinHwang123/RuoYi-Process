@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -224,14 +225,25 @@ public class ModelEditorJsonRestResource extends BaseController implements Model
             BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
             JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
             BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
-            BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
-            byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
 
-            ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
-            IOUtils.copy(in, response.getOutputStream());
-            String filename = bpmnModel.getMainProcess().getId() + ".bpmn20.xml";
-            response.setHeader("Content-Disposition", "attachment; filename=" + filename);
-            response.flushBuffer();
+            // 流程非空判断
+            if (!CollectionUtils.isEmpty(bpmnModel.getProcesses())) {
+                BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
+                byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);
+
+                ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);
+                String filename = bpmnModel.getMainProcess().getId() + ".bpmn";
+                response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+                IOUtils.copy(in, response.getOutputStream());
+                response.flushBuffer();
+            } else {
+                try {
+                    response.sendRedirect("/process/modeler/modelList");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
         } catch (Exception e) {
             LOGGER.error("导出model的xml文件失败：modelId={}", modelId, e);
             try {

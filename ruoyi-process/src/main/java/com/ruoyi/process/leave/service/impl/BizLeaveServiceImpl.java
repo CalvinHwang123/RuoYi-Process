@@ -267,14 +267,20 @@ public class BizLeaveServiceImpl implements IBizLeaveService {
         // 更新待办事项状态
         BizTodoItem query = new BizTodoItem();
         query.setTaskId(taskId);
-        BizTodoItem update = CollectionUtils.isEmpty(bizTodoItemService.selectBizTodoItemList(query)) ? null : bizTodoItemService.selectBizTodoItemList(query).get(0);
-        if (update != null) {
-            update.setIsView("1");
-            update.setIsHandle("1");
-            update.setHandleUserId(ShiroUtils.getLoginName());
-            update.setHandleUserName(ShiroUtils.getSysUser().getUserName());
-            update.setHandleTime(DateUtils.getNowDate());
-            bizTodoItemService.updateBizTodoItem(update);
+        // 考虑到候选用户组，会有多个 todoitem 办理同个 task
+        List<BizTodoItem> updateList = CollectionUtils.isEmpty(bizTodoItemService.selectBizTodoItemList(query)) ? null : bizTodoItemService.selectBizTodoItemList(query);
+        for (BizTodoItem update: updateList) {
+            // 找到当前登录用户的 todoitem，置为已办
+            if (update.getTodoUserId().equals(ShiroUtils.getLoginName())) {
+                update.setIsView("1");
+                update.setIsHandle("1");
+                update.setHandleUserId(ShiroUtils.getLoginName());
+                update.setHandleUserName(ShiroUtils.getSysUser().getUserName());
+                update.setHandleTime(DateUtils.getNowDate());
+                bizTodoItemService.updateBizTodoItem(update);
+            } else {
+                bizTodoItemService.deleteBizTodoItemById(update.getId()); // 删除候选用户组其他 todoitem
+            }
         }
 
         // 下一节点处理人待办事项

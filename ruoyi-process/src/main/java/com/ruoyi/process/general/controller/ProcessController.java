@@ -15,6 +15,7 @@ import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,9 @@ public class ProcessController extends BaseController {
 
     @Autowired
     private IProcessService processService;
+
+    @Autowired
+    private RuntimeService runtimeService;
 
     /**
      * 加载审批历史弹窗
@@ -78,9 +82,9 @@ public class ProcessController extends BaseController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(pProcessInstanceId).singleResult();
         ProcessDefinitionQuery pdq = repositoryService.createProcessDefinitionQuery();
-
-        ProcessDefinition pd = pdq.processDefinitionKey("leave").singleResult();
+        ProcessDefinition pd = pdq.processDefinitionId(processInstance.getProcessDefinitionId()).singleResult();
 
         String resourceName = pd.getDiagramResourceName();
 

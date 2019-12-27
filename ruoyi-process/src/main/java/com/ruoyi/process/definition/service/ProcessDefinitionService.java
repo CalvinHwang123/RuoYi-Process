@@ -117,7 +117,7 @@ public class ProcessDefinitionService {
                 repositoryService.createDeployment()
                         .addZipInputStream(inputStream)
                         .deploy();
-            } else if (filePath.endsWith(".bpmn") || filePath.endsWith(".bpmn20.xml")) {
+            } else if (filePath.endsWith(".bpmn")) {
                 repositoryService.createDeployment()
                         .addInputStream(filePath, new FileInputStream(filePath))
                         .deploy();

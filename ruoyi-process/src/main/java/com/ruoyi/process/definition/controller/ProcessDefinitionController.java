@@ -58,16 +58,10 @@ public class ProcessDefinitionController extends BaseController {
         try {
             if (!file.isEmpty()) {
                 String extensionName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
-                if ("xml".equalsIgnoreCase(extensionName)) {
-                    if (!file.getOriginalFilename().contains("bpmn20.xml")) {
-                        return error("流程定义文件仅支持 bpmn, bpmn20.xml, zip 和 bar 格式！");
-                    }
-                }
-                if (!"xml".equalsIgnoreCase(extensionName)
-                        && !"bpmn".equalsIgnoreCase(extensionName)
+                if (!"bpmn".equalsIgnoreCase(extensionName)
                         && !"zip".equalsIgnoreCase(extensionName)
                         && !"bar".equalsIgnoreCase(extensionName)) {
-                    return error("流程定义文件仅支持 bpmn, bpmn20.xml, zip 和 bar 格式！");
+                    return error("流程定义文件仅支持 bpmn, zip 和 bar 格式！");
                 }
                 // p.s. 此时 FileUploadUtils.upload() 返回字符串 fileName 前缀为 Constants.RESOURCE_PREFIX，需剔除
                 // 详见: FileUploadUtils.getPathFileName(...)
@@ -78,7 +72,7 @@ public class ProcessDefinitionController extends BaseController {
                     return success();
                 }
             }
-            return error();
+            return error("不允许上传空文件！");
         }
         catch (Exception e) {
             log.error("上传流程定义文件失败！", e);
