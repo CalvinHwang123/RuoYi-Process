@@ -58,7 +58,8 @@
     <ol>
       <li>流程框架：<a href="https://www.activiti.org/" target="_blank">Activiti 6.x</a></li>
       <li>核心框架：Spring Boot 2.x</li>
-      <li><s>在线绘图：<a href="https://github.com/bpmn-io/bpmn-js" target="_blank">bpmn-js</a></s></li>
+      <!--<li><s>在线绘图：<a href="https://github.com/bpmn-io/bpmn-js" target="_blank">bpmn-js</a></s></li>-->
+      <li>在线绘图：Activiti Modeler</li>
       <li>模板引擎：Thymeleaf 3.x</li>
       <li>更多……</li>
     </ol>
@@ -103,10 +104,27 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h5 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#version" href="#v15">v1.5</a><code class="pull-right">2020.03.08</code>
+                  </h5>
+                </div>
+                <div id="v15" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    <ol>
+                      <li>Activiti Modeler 在线设计去除右上角关闭按钮。</li>
+                      <li>Activiti Modeler 在线设计去除保存并关闭 Editor 按钮。</li>
+                      <li>Activiti Modeler 提供请假流程模型图（请运行最新版数据库脚本文件）。</li>
+                      <li>删除冗余的 SQL 文件。</li>
+                      <li>修复已办结流程查看进度图报错。</li>
+                      <li>修复销假监听器修改请假表实际开始和结束日期无效的问题。</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="panel-heading">
+                  <h5 class="panel-title">
                     <a data-toggle="collapse" data-parent="#version" href="#v14">v1.4</a><code class="pull-right">2019.12.27</code>
                   </h5>
                 </div>
-                <div id="v14" class="panel-collapse collapse in">
+                <div id="v14" class="panel-collapse collapse">
                   <div class="panel-body">
                     <ol>
                       <li>修复大文件(10kb左右)模型导出失效。</li>

@@ -1,6 +1,6 @@
 ### 一. 超级懒人版
 
-只需要执行 xianlu_proc_last.sql 即可。
+只需要执行 xianlu_proc_最新日期.sql 即可。
 
 ### 二. 强迫症患者版
 

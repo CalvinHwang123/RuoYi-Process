@@ -82,9 +82,16 @@ public class ProcessController extends BaseController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
+        String processDefinitionId = "";
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(pProcessInstanceId).singleResult();
+        if(processInstance == null) {
+            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(pProcessInstanceId).singleResult();
+            processDefinitionId = historicProcessInstance.getProcessDefinitionId();
+        } else {
+            processDefinitionId = processInstance.getProcessDefinitionId();
+        }
         ProcessDefinitionQuery pdq = repositoryService.createProcessDefinitionQuery();
-        ProcessDefinition pd = pdq.processDefinitionId(processInstance.getProcessDefinitionId()).singleResult();
+        ProcessDefinition pd = pdq.processDefinitionId(processDefinitionId).singleResult();
 
         String resourceName = pd.getDiagramResourceName();
 

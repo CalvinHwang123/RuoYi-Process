@@ -14,7 +14,7 @@
         	</button>
   		  </div>
         </div>
-        <div class="btn-group pull-right" ng-show="!secondaryItems.length">
+        <!--<div class="btn-group pull-right" ng-show="!secondaryItems.length">
 	        <div class="btn-toolbar pull-right" ng-controller="ToolbarController">
         	<button title="{{item.title | translate}}" ng-repeat="item in secondaryItems" ng-switch on="item.type" class="btn btn-inverse" ng-class="{'separator': item.type == 'separator'}"
                 ng-disabled="item.type == 'separator'" ng-click="toolbarSecondaryButtonClicked($index)" id="{{item.id}}">
@@ -22,7 +22,7 @@
 	            <div ng-switch-when="separator" ng-class="item.cssClass"></div>
         	</button>
   		  </div>
-        </div>
+        </div>-->
   </div>
   <div class="full">
       <div class="row row-no-gutter">
@@ -48,7 +48,7 @@
 	                         data-drag="true"
 	                         jqyoui-draggable="{onStart:'startDragCallback', onDrag:'dragCallback'}"
 	                         data-jqyoui-options="{revert: 'invalid', helper: 'clone', opacity : 0.5}">
-	                         
+
 	                        <img ng-src="editor-app/stencilsets/bpmn2.0/icons/{{item.icon}}" width="16px;" height="16px;"/>
 	                        {{item.name}}
 	                    </li>
@@ -57,21 +57,21 @@
 		      </div>
 	      </div>
 	      <div id="canvasHelpWrapper" class="col-xs-9">
-	      	<div class="canvas-wrapper" id="canvasSection" 
+	      	<div class="canvas-wrapper" id="canvasSection"
 	      		ng-model="droppedElement"
                   ng-model="droppedElement"
                   data-drop="true"
                   data-jqyoui-options
-                  jqyoui-droppable="{onDrop:'dropCallback',onOver: 'overCallback', onOut: 'outCallback'}"> 
+                  jqyoui-droppable="{onDrop:'dropCallback',onOver: 'overCallback', onOut: 'outCallback'}">
             	<div class="canvas-message" id="model-modified-date"></div>
-            	<div class="Oryx_button" 
-            	     id="delete-button" 
+            	<div class="Oryx_button"
+            	     id="delete-button"
             	     title="{{'BUTTON.ACTION.DELETE.TOOLTIP' | translate}}"
             	     ng-click="deleteShape()"
             	     style="display:none">
             	    <img src="editor-app/images/delete.png"/>
             	</div>
-            	<div class="Oryx_button" 
+            	<div class="Oryx_button"
             	     id="morph-button"
             	     title="{{'BUTTON.ACTION.MORPH.TOOLTIP' | translate}}"
             	     ng-click="morphShape()"
@@ -104,9 +104,9 @@
 		                        <strong>{{'ELEMENT.AUTHOR' | translate}}: </strong> {{selectedItem.auditData.author}}
 		                    </div>
 		                    <div class="selected-item-title">
-		                        <a ng-click="propertyWindowState.toggle()"> 
+		                        <a ng-click="propertyWindowState.toggle()">
 		                            <i class="glyphicon" ng-class="{'glyphicon-chevron-right': propertyWindowState.collapsed, 'glyphicon-chevron-down': !propertyWindowState.collapsed}"></i>
-		                            <span ng-show="selectedItem.title != undefined && selectedItem.title != null && selectedItem.title.length > 0">{{selectedItem.title}}</span> 
+		                            <span ng-show="selectedItem.title != undefined && selectedItem.title != null && selectedItem.title.length > 0">{{selectedItem.title}}</span>
 		                            <span ng-show="!selectedItem || selectedItem.title == undefined || selectedItem.title == null || selectedItem.title.length == 0">{{modelData.name}}</span>
 		                        </a>
 		                    </div>
@@ -117,7 +117,7 @@
 	                                ng-click="propertyClicked($index)" ng-class="{'clear' : $index%2 == 0}">
 	                                <span class="title" ng-if="!property.hidden">{{ property.title }}&nbsp;:</span>
 	                                <span class="title-removed" ng-if="property.hidden"><i>{{ property.title }}&nbsp;({{'PROPERTY.REMOVED' | translate}})&nbsp;:</i></span>
-	                                <span class="value"> 
+	                                <span class="value">
 	                                    <ng-include
 	                                        src="getPropertyTemplateUrl($index)" ng-if="!property.hasReadWriteMode"></ng-include>
 	                                    <ng-include src="getPropertyReadModeTemplateUrl($index)"
@@ -128,8 +128,8 @@
 	                            </div>
 	                        </div>
 	                    </div>
-	    			</div>     
-    			</div>            
+	    			</div>
+    			</div>
             </div>
          </div>
     </div>

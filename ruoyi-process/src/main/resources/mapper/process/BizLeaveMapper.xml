@@ -96,6 +96,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="applyUser != null ">apply_user = #{applyUser},</if>
             <if test="applyTime != null ">apply_time = #{applyTime},</if>
+            <if test="realityStartTime != null ">reality_start_time = #{realityStartTime},</if>
+            <if test="realityEndTime != null ">reality_end_time = #{realityEndTime},</if>
         </trim>
         where id = #{id}
     </update>
