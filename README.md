@@ -141,10 +141,10 @@ QQ群：794711759。
 
 [从零开始整合 Activiti 6.X + Spring Boot 2.X 工作流管理系统](<https://www.bilibili.com/video/av79865921>)
 
-![tutorial](screenshot\tutorial.png)
+![tutorial](screenshot/tutorial.png)
 
-![outline1](screenshot\outline_1.png)
+![outline1](screenshot/outline_1.png)
 
-![outline1](screenshot\outline_2.png)
+![outline1](screenshot/outline_2.png)
 
 
